@@ -1,3 +1,4 @@
+const Op = Sequelize.Op
 const Todo = require('../models').Todo
 
 class Todos {
