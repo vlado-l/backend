@@ -6,7 +6,22 @@ class Todos {
   }
 
   readAll () {
-    return Todo.findAll()
+    return Todo.findAll({
+      where: {
+        [Op.or]: [
+          {
+            title: {
+              [Op.substring]: req.query.search
+            }
+          },
+          {
+            description: {
+              [Op.substring]: req.query.search
+            }
+          }
+        ]
+      }
+    })
   }
 
   readOne (req) {
