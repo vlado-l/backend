@@ -1,73 +1,33 @@
+const Todo = require('../models').Todo
+
 class Todos {
-  constructor (conn, responders) {
-    global.conn = conn
-    global.responders = responders
+  create (req) {
+    return Todo.create(req.body)
   }
 
-  create (req, res) {
-    const title = req.body.title
-    const description = req.body.description
-
-    const query = `
-      INSERT INTO todos
-      VALUES (null, '${title}', '${description}')
-    `
-
-    global.conn.query(query, global.responders.withJson(res))
+  readAll () {
+    return Todo.findAll()
   }
 
-  readAll (req, res) {
-    const search = req.query.search
-    const query = `
-      SELECT *
-      FROM   todos
-      WHERE  title       LIKE '%${search}%'
-      OR     description LIKE '%${search}%'
-    `
-
-    global.conn.query(query, global.responders.withJson(res))
+  readOne (req) {
+    return Todo.findByPk(req.params.id)
   }
 
-  readOne (req, res) {
-    const id = req.params.id
-
-    const query = `
-      SELECT *
-      FROM   todos
-      WHERE  id = ${id}
-    `
-
-    global.conn.query(query, global.responders.withJson(res))
+  update (req) {
+    return Todo.update(req.body, {
+      where: {
+        id: req.params.id
+      }
+    })
   }
 
-  update (req, res) {
-    const id = req.params.id
-    const title = req.body.title
-    const description = req.body.description
-
-    const query = `
-      UPDATE todos
-      SET    title       = '${title}',
-             description = '${description}'
-      WHERE  id = ${id}  
-    `
-  
-    global.conn.query(query, global.responders.withJson(res))
-  }
-
-  delete (req, res) {
-    const id = req.params.id
-
-    const query = `
-      DELETE FROM todos
-      WHERE id = ${id}
-    `
-
-    global.conn.query(query, global.responders.withJson(res))
+  delete (req) {
+    return Todo.destroy({
+      where: {
+        id: req.params.id
+      }
+    })
   }
 }
 
-module.exports = new Todos(
-  require('../db/connection.js'),
-  require('../responders/todos.js')
-)
+module.exports = new Todos()
