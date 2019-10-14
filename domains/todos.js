@@ -1,4 +1,4 @@
-const Op = Sequelize.Op
+const Op = require('../models').Sequelize.Op
 const Todo = require('../models').Todo
 
 class Todos {
@@ -6,7 +6,7 @@ class Todos {
     return Todo.create(req.body)
   }
 
-  readAll () {
+  readAll (req) {
     return Todo.findAll({
       where: {
         [Op.or]: [
@@ -23,10 +23,6 @@ class Todos {
         ]
       }
     })
-  }
-
-  readOne (req) {
-    return Todo.findByPk(req.params.id)
   }
 
   update (req) {

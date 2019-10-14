@@ -4,13 +4,8 @@ const router = express.Router()
 const Todos = require('../domains/todos.js')
 const Responders = require('../responders')
 
-router.get('/', async function (_, res) {
-  let rows = await Todos.readAll()
-  Responders.withJson(res, rows)
-})
-
-router.get('/:id', async function (req, res) {
-  let rows = await Todos.readOne(req)
+router.get('/', async function (req, res) {
+  let rows = await Todos.readAll(req)
   Responders.withJson(res, rows)
 })
 
